@@ -31,7 +31,7 @@ export function CreateAccountModal({ onClose }: { onClose: () => void }) {
       return;
     }
 
-    // Step 1: Create user in Supabase Auth
+    // Step 1: Sign Up
     const { data: signupData, error: signupError } = await signUpUser({
       email: formData.email,
       password: formData.password,
@@ -43,10 +43,10 @@ export function CreateAccountModal({ onClose }: { onClose: () => void }) {
       return;
     }
 
-    // Step 2: Insert user profile in 'users' table
+    // Step 2: Insert User Record
     const { error: userInsertError } = await supabase.from("users").insert([
       {
-        id: signupData.user.id, // ✅ Link auth ID with table ID
+        id: signupData.user.id,
         email: formData.email,
         role: formData.role,
         name: formData.name,
@@ -68,47 +68,116 @@ export function CreateAccountModal({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg p-8 w-full max-w-md space-y-6 overflow-y-auto max-h-[90vh]">
-        <h2 className="text-2xl font-bold text-center">Create Account</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md bg-white rounded-lg p-6 sm:p-8 space-y-6 overflow-y-auto max-h-[90vh]">
+        
+        {/* Heading */}
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-blue-900">
+          Create <span className="text-blue-600">Account</span>
+        </h2>
 
+        {/* Form */}
         <div className="space-y-4">
-          <Input type="text" placeholder="Full Name" name="name" value={formData.name} onChange={handleChange} />
-          <Input type="number" placeholder="Age" name="age" value={formData.age} onChange={handleChange} />
+          <Input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+          />
 
-          <select name="sex" value={formData.sex} onChange={handleChange} className="w-full rounded-md border border-gray-300 p-2">
+          <Input
+            type="number"
+            name="age"
+            placeholder="Age"
+            value={formData.age}
+            onChange={handleChange}
+          />
+
+          <select
+            name="sex"
+            value={formData.sex}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
             <option value="">Select Sex</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
 
-          <Input type="text" placeholder="Nationality" name="nationality" value={formData.nationality} onChange={handleChange} />
+          <Input
+            type="text"
+            name="nationality"
+            placeholder="Nationality"
+            value={formData.nationality}
+            onChange={handleChange}
+          />
 
-          <select name="role" value={formData.role} onChange={handleChange} className="w-full rounded-md border border-gray-300 p-2">
+          <select
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
             <option value="">Select Role</option>
             <option value="Patient">Patient</option>
             <option value="Provider">Provider</option>
           </select>
 
           {formData.role === "Patient" && (
-            <Input type="text" placeholder="Aadhar Number" name="nationalId" value={formData.nationalId} onChange={handleChange} />
+            <Input
+              type="text"
+              name="nationalId"
+              placeholder="Aadhar Number"
+              value={formData.nationalId}
+              onChange={handleChange}
+            />
           )}
+
           {formData.role === "Provider" && (
-            <Input type="text" placeholder="Medical License Number" name="nationalId" value={formData.nationalId} onChange={handleChange} />
+            <Input
+              type="text"
+              name="nationalId"
+              placeholder="Medical License Number"
+              value={formData.nationalId}
+              onChange={handleChange}
+            />
           )}
 
-          <Input type="email" placeholder="Email" name="email" value={formData.email} onChange={handleChange} />
-          <Input type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
+          <Input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+          />
 
-          <Button onClick={handleSubmit} className="w-full bg-blue-600 hover:bg-blue-700">
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+
+          <Button
+            onClick={handleSubmit}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-md sm:text-lg transition rounded-md"
+          >
             Create Account
           </Button>
         </div>
 
-        <Button variant="ghost" className="w-full text-muted-foreground" onClick={onClose}>
+        {/* Cancel Button */}
+        <Button
+          variant="ghost"
+          className="w-full text-gray-500 hover:text-gray-700"
+          onClick={onClose}
+        >
           Cancel
         </Button>
+
       </div>
     </div>
   );

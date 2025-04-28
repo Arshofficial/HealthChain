@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SidebarProvider } from "../../components/ui/sidebar";
+import { Sidebar } from "@/components/ui/sidebar";
 import { Header } from "../../components/ui/header";
 import { PatientSidebar } from "../../components/ui/patient-sidebar";
 import { ProviderSidebar } from "../../components/ui/provider-sidebar";
 import { supabase } from "../../lib/supabaseClient";
+import { Footer } from "@/components/ui/footer";
 
 export default function LayoutClient({ children }: { children: React.ReactNode }) {
   const [userRole, setUserRole] = useState<string | null>(null);
@@ -35,9 +36,9 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
       <div className="flex flex-1">
         {/* Sidebar */}
         <aside className="w-60 border-r bg-white flex flex-col">
-          <SidebarProvider>
+          <Sidebar>
             {userRole !== null && (userRole === "Provider" ? <ProviderSidebar /> : <PatientSidebar />)}
-          </SidebarProvider>
+          </Sidebar>
         </aside>
 
         {/* Main Content */}
@@ -45,6 +46,7 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
           {children}
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { CreateAccountModal } from "./create-account-modal";
-import { loginUser, supabase } from "../../lib/supabaseAuth"; // fixed import
+import { loginUser, supabase } from "../../lib/supabaseAuth";
 import { useRouter } from "next/navigation";
 
 export function LoginModal({ onClose }: { onClose: () => void }) {
@@ -51,30 +51,57 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg p-8 w-full max-w-md space-y-6">
-        <h2 className="text-2xl font-bold text-center">Login to HealthChain</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 sm:p-8 space-y-6">
+        {/* Heading */}
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-blue-900">
+          Login to <span className="text-blue-600">HealthChain</span>
+        </h2>
 
+        {/* Form */}
         <div className="space-y-4">
-          <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <Button onClick={handleLogin} className="w-full bg-blue-600 hover:bg-blue-700">
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button
+            onClick={handleLogin}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-md sm:text-lg transition rounded-md"
+          >
             Login
           </Button>
         </div>
 
-        <p className="text-center text-sm text-muted-foreground">
+        {/* Create account link */}
+        <p className="text-center text-sm text-gray-600">
           Don't have an account?{" "}
-          <span className="text-blue-600 hover:underline cursor-pointer" onClick={() => setShowCreate(true)}>
+          <span
+            className="text-blue-600 hover:underline cursor-pointer font-medium"
+            onClick={() => setShowCreate(true)}
+          >
             Create Account
           </span>
         </p>
 
-        <Button variant="ghost" className="w-full text-muted-foreground" onClick={onClose}>
+        {/* Close button */}
+        <Button
+          variant="ghost"
+          className="w-full text-gray-500 hover:text-gray-700"
+          onClick={onClose}
+        >
           Close
         </Button>
       </div>
 
+      {/* Create Account Modal */}
       {showCreate && <CreateAccountModal onClose={() => setShowCreate(false)} />}
     </div>
   );
