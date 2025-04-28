@@ -5,12 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "predeploy": "npm run build",
-      "deploy": "gh-pages -d build",
     "build": "next build",
+    "export": "next export",
+    "predeploy": "npm run build && npm run export && cp out/index.html out/404.html",
+    "deploy": "gh-pages -d out",
     "start": "next start"
   },
-  
   "dependencies": {
     "@hookform/resolvers": "3.10.0",
     "@radix-ui/react-accordion": "1.2.2",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation"; // ✅ Correct import
+import { useRouter } from "next/navigation";
 import { supabase } from "../lib/supabaseClient";
 import { Clock, FileText, ShieldAlert, ShieldCheck } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
@@ -10,10 +10,25 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-export function AccessRequestsTable() {
-  const router = useRouter(); // ✅ Instantiate router
+// Define AccessRequest type properly
+interface AccessRequest {
+  id: string;
+  patientId: string;
+  patientName: string;
+  requesterName: string;
+  status: string;
+  requestDate: string;
+  recordType: string;
+  reason: string;
+  requestedDuration: number;
+  avatar: string;
+  file_id: string | null;
+}
 
-  const [accessRequests, setAccessRequests] = useState<any[]>([]);
+export function AccessRequestsTable() {
+  const router = useRouter();
+
+  const [accessRequests, setAccessRequests] = useState<AccessRequest[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -43,8 +58,9 @@ export function AccessRequestsTable() {
           requested_duration,
           reason,
           requested_at,
-          owner:users!access_control_owner_id_fkey ( id, name ),
-          requester:users!access_control_requester_id_fkey ( id, name )
+          file_id,
+          owner:users!access_control_owner_id_fkey(id, name),
+          requester:users!access_control_requester_id_fkey(id, name)
         `)
         .eq("requester_id", providerId)
         .order("requested_at", { ascending: false });
@@ -52,24 +68,24 @@ export function AccessRequestsTable() {
       if (error) {
         console.error("Error fetching access requests:", error.message);
       } else {
-        const formatted = (data || []).map((req) => ({
+        const formatted = (data || []).map((req: any) => ({
           id: req.id,
-          patientId: req.owner?.id,
-          patientName: req.owner?.name || "Unknown",
-          requesterName: req.requester?.name || "Unknown",
+          patientId: Array.isArray(req.owner) ? req.owner[0]?.id : req.owner?.id || "Unknown",
+          patientName: Array.isArray(req.owner) ? req.owner[0]?.name || "Unknown" : req.owner?.name || "Unknown",
+          requesterName: Array.isArray(req.requester) ? req.requester[0]?.name || "Unknown" : req.requester?.name || "Unknown",
           status: req.status,
-          requestDate: new Date(req.requested_at).toLocaleDateString(),
+          requestDate: req.requested_at ? new Date(req.requested_at).toLocaleDateString() : "Unknown",
           recordType: req.requested_record_types?.join(", ") || "N/A",
           reason: req.reason || "-",
-          requestedDuration: req.requested_duration,
-          avatar: req.owner?.name ? req.owner.name[0] : "U",
+          requestedDuration: req.requested_duration || 7,
+          avatar: (Array.isArray(req.owner) ? req.owner[0]?.name?.[0] : req.owner?.name?.[0]) || "U",
           file_id: req.file_id || null,
         }));
 
         setAccessRequests(formatted);
       }
     } catch (err) {
-      console.error("Unexpected error fetching requests", err);
+      console.error("Unexpected error fetching access requests", err);
     } finally {
       setLoading(false);
     }
@@ -108,10 +124,7 @@ export function AccessRequestsTable() {
     if (!confirmed) return;
 
     try {
-      const { error } = await supabase
-        .from("access_control")
-        .delete()
-        .eq("id", requestId);
+      const { error } = await supabase.from("access_control").delete().eq("id", requestId);
 
       if (error) {
         console.error("Error cancelling request:", error.message);
@@ -126,7 +139,7 @@ export function AccessRequestsTable() {
     }
   };
 
-  const handleResendRequest = async (oldRequest: any) => {
+  const handleResendRequest = async (oldRequest: AccessRequest) => {
     const confirmed = window.confirm("Do you want to resend this access request?");
     if (!confirmed) return;
 
@@ -135,13 +148,13 @@ export function AccessRequestsTable() {
 
       const { error } = await supabase.from("access_control").insert([
         {
-          file_id: oldRequest.file_id || null,
+          file_id: oldRequest.file_id,
           requester_id: userData?.user?.id,
           owner_id: oldRequest.patientId,
           status: "pending",
           reason: oldRequest.reason,
           requested_record_types: oldRequest.recordType.split(", "),
-          requested_duration: oldRequest.requestedDuration || 7,
+          requested_duration: oldRequest.requestedDuration,
         },
       ]);
 
