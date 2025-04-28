@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",                         // 🔥 Important change here
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["src/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
