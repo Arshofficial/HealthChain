@@ -5,8 +5,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === "production" ? "/HealthChain" : "",
-  assetPrefix: process.env.NODE_ENV === "production" ? "/HealthChain/" : "",
+  // basePath: process.env.NODE_ENV === "production" ? "" : "",
+  // assetPrefix: process.env.NODE_ENV === "production" ? "" : "",
 };
 
 export default nextConfig;
