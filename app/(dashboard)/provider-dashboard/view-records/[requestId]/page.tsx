@@ -1,5 +1,5 @@
 "use client";
-
+import "./page-server";
 export const dynamic = "force-dynamic";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
