@@ -1,18 +1,12 @@
 /** @type {import('next').NextConfig} */
-
-// Force dynamic rendering for client components
 export const dynamic = "force-dynamic";
 
-const isProd = process.env.NODE_ENV === 'production';
-
 const nextConfig = {
-  output: 'export',                     // Export the site as static HTML
   images: {
-    unoptimized: true,                   // Disable Image Optimization
+    unoptimized: true,
   },
-  basePath: isProd ? '/HealthChain' : '', // GitHub Pages/Netlify Subfolder Setup
-  assetPrefix: isProd ? '/HealthChain/' : '',
-  trailingSlash: true,                   // Important for Static Export
+  basePath: process.env.NODE_ENV === "production" ? "/HealthChain" : "",
+  assetPrefix: process.env.NODE_ENV === "production" ? "/HealthChain/" : "",
 };
 
 export default nextConfig;
