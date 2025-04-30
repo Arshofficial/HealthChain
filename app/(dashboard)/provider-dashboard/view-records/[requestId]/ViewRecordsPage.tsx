@@ -32,13 +32,19 @@ export default function ViewRecordsPage() {
           .single();
 
         if (accessError || !accessData) {
-          console.error("Failed to fetch access control record:", accessError?.message);
+          console.error(
+            "Failed to fetch access control record:",
+            accessError?.message
+          );
           return;
         }
 
         const { owner_id, requested_record_types } = accessData;
-        const parsedRecordTypes = Array.isArray(requested_record_types) ? requested_record_types : [];
-        const firstRecordType = parsedRecordTypes.length > 0 ? parsedRecordTypes[0] : null;
+        const parsedRecordTypes = Array.isArray(requested_record_types)
+          ? requested_record_types
+          : [];
+        const firstRecordType =
+          parsedRecordTypes.length > 0 ? parsedRecordTypes[0] : null;
 
         setPatientId(owner_id);
         setRecordType(firstRecordType);
@@ -49,17 +55,20 @@ export default function ViewRecordsPage() {
         }
 
         // Fetch patient records
-        const { data: patientRecords, error: recordsError } = await supabase.rpc('fetch_patient_records', {
-          p_owner_id: owner_id,
-          p_requested_type: firstRecordType
-        });
+        const { data: patientRecords, error: recordsError } =
+          await supabase.rpc("fetch_patient_records", {
+            p_owner_id: owner_id,
+            p_requested_type: firstRecordType,
+          });
 
         if (recordsError) {
-          console.error("Error fetching patient records:", recordsError?.message);
+          console.error(
+            "Error fetching patient records:",
+            recordsError?.message
+          );
         } else {
           setRecords(patientRecords || []);
         }
-
       } catch (error) {
         console.error("Unexpected error fetching records:", error);
       } finally {
@@ -70,7 +79,10 @@ export default function ViewRecordsPage() {
     fetchAccessRequestDetails();
   }, [requestId]);
 
-  async function handleViewOrDownload(filePath: string, action: "view" | "download") {
+  async function handleViewOrDownload(
+    filePath: string,
+    action: "view" | "download"
+  ) {
     if (!filePath) return;
 
     try {
@@ -103,13 +115,19 @@ export default function ViewRecordsPage() {
   }
 
   if (!patientId || !recordType) {
-    return <div className="p-6 text-center">Invalid request or missing record type.</div>;
+    return (
+      <div className="p-6 text-center">
+        Invalid request or missing record type.
+      </div>
+    );
   }
 
   return (
     <div className="p-6 flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Patient Records</h1>
-      <p><strong>Requested Record Type:</strong> {recordType}</p>
+      <p>
+        <strong>Requested Record Type:</strong> {recordType}
+      </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {records.length === 0 ? (
@@ -135,7 +153,9 @@ export default function ViewRecordsPage() {
                 <Button
                   size="sm"
                   variant="default"
-                  onClick={() => handleViewOrDownload(record.file_url, "download")}
+                  onClick={() =>
+                    handleViewOrDownload(record.file_url, "download")
+                  }
                 >
                   Download
                 </Button>
@@ -146,9 +166,7 @@ export default function ViewRecordsPage() {
       </div>
 
       <div className="mt-6">
-        <Button onClick={() => window.history.back()}>
-          Go Back
-        </Button>
+        <Button onClick={() => window.history.back()}>Go Back</Button>
       </div>
     </div>
   );

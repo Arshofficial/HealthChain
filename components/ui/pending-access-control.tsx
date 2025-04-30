@@ -58,7 +58,11 @@ export function PendingAccessControl() {
     }
   };
 
-  const handleUpdateStatus = async (requestId: string, status: "approved" | "rejected", requesterId: string) => {
+  const handleUpdateStatus = async (
+    requestId: string,
+    status: "approved" | "rejected",
+    requesterId: string
+  ) => {
     setSubmitting(true);
 
     try {
@@ -73,14 +77,16 @@ export function PendingAccessControl() {
         const validTill = new Date();
         validTill.setDate(validTill.getDate() + 30); // 30 days validity
 
-        const { error: insertError } = await supabase.from("provider_patient").insert([
-          {
-            provider_id: requesterId,
-            patient_id: userId,
-            access_request_id: requestId,
-            valid_till: validTill,
-          },
-        ]);
+        const { error: insertError } = await supabase
+          .from("provider_patient")
+          .insert([
+            {
+              provider_id: requesterId,
+              patient_id: userId,
+              access_request_id: requestId,
+              valid_till: validTill,
+            },
+          ]);
 
         if (insertError) throw insertError;
       }
@@ -101,7 +107,11 @@ export function PendingAccessControl() {
   }
 
   if (pendingRequests.length === 0) {
-    return <p className="text-muted-foreground">No pending access requests at the moment.</p>;
+    return (
+      <p className="text-muted-foreground">
+        No pending access requests at the moment.
+      </p>
+    );
   }
 
   return (
@@ -124,7 +134,9 @@ export function PendingAccessControl() {
               size="sm"
               className="bg-green-600 hover:bg-green-700 text-white"
               disabled={submitting}
-              onClick={() => handleUpdateStatus(request.id, "approved", request.requester_id)}
+              onClick={() =>
+                handleUpdateStatus(request.id, "approved", request.requester_id)
+              }
             >
               Approve
             </Button>
@@ -132,7 +144,9 @@ export function PendingAccessControl() {
               size="sm"
               variant="destructive"
               disabled={submitting}
-              onClick={() => handleUpdateStatus(request.id, "rejected", request.requester_id)}
+              onClick={() =>
+                handleUpdateStatus(request.id, "rejected", request.requester_id)
+              }
             >
               Reject
             </Button>

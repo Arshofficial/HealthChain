@@ -64,8 +64,9 @@ export function PatientSearchSection({
 
     setIsSearching(false);
   }
-
-  
+  const maskHealthId = (id: string) => {
+    return id.length > 2 ? `${"x".repeat(id.length - 4)}${id.slice(-4)}` : "xx";
+  };
 
   return (
     <Card className="border-blue-100 shadow-sm">
@@ -133,24 +134,26 @@ export function PatientSearchSection({
                         ID: {patient.id} • DOB: {patient.dob} • {patient.gender}
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        Health ID: {patient.healthId}
+                        <span className="text-muted-foreground text-sm">
+                          Aadhar ID: {maskHealthId(patient.healthId)}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     {patient.hasAccess ? (
                       <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                        Access Granted
+                        <span className="hidden sm:inline">Access Granted</span>
                       </Badge>
                     ) : (
                       <Button
                         variant="outline"
                         size="sm"
-                        className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        className="text-blue-600 border-blue-200 hover:bg-blue-50 w-full sm:w-auto"
                         onClick={() => onRequestAccess(patient)}
                       >
                         <UserPlus className="mr-1 h-3 w-3" />
-                        Request Access
+                        <span className="hidden sm:inline">Request Access</span>
                       </Button>
                     )}
                   </div>

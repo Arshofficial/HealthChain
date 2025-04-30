@@ -4,8 +4,21 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../lib/supabaseClient";
 import { Clock, FileText, ShieldAlert, ShieldCheck } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -49,7 +62,8 @@ export function AccessRequestsTable() {
 
       const { data, error } = await supabase
         .from("access_control")
-        .select(`
+        .select(
+          `
           id,
           requester_id,
           owner_id,
@@ -61,7 +75,8 @@ export function AccessRequestsTable() {
           file_id,
           owner:users!access_control_owner_id_fkey(id, name),
           requester:users!access_control_requester_id_fkey(id, name)
-        `)
+        `
+        )
         .eq("requester_id", providerId)
         .order("requested_at", { ascending: false });
 
@@ -70,15 +85,26 @@ export function AccessRequestsTable() {
       } else {
         const formatted = (data || []).map((req: any) => ({
           id: req.id,
-          patientId: Array.isArray(req.owner) ? req.owner[0]?.id : req.owner?.id || "Unknown",
-          patientName: Array.isArray(req.owner) ? req.owner[0]?.name || "Unknown" : req.owner?.name || "Unknown",
-          requesterName: Array.isArray(req.requester) ? req.requester[0]?.name || "Unknown" : req.requester?.name || "Unknown",
+          patientId: Array.isArray(req.owner)
+            ? req.owner[0]?.id
+            : req.owner?.id || "Unknown",
+          patientName: Array.isArray(req.owner)
+            ? req.owner[0]?.name || "Unknown"
+            : req.owner?.name || "Unknown",
+          requesterName: Array.isArray(req.requester)
+            ? req.requester[0]?.name || "Unknown"
+            : req.requester?.name || "Unknown",
           status: req.status,
-          requestDate: req.requested_at ? new Date(req.requested_at).toLocaleDateString() : "Unknown",
+          requestDate: req.requested_at
+            ? new Date(req.requested_at).toLocaleDateString()
+            : "Unknown",
           recordType: req.requested_record_types?.join(", ") || "N/A",
           reason: req.reason || "-",
           requestedDuration: req.requested_duration || 7,
-          avatar: (Array.isArray(req.owner) ? req.owner[0]?.name?.[0] : req.owner?.name?.[0]) || "U",
+          avatar:
+            (Array.isArray(req.owner)
+              ? req.owner[0]?.name?.[0]
+              : req.owner?.name?.[0]) || "U",
           file_id: req.file_id || null,
         }));
 
@@ -120,11 +146,16 @@ export function AccessRequestsTable() {
   };
 
   const handleCancelRequest = async (requestId: string) => {
-    const confirmed = window.confirm("Are you sure you want to cancel this access request?");
+    const confirmed = window.confirm(
+      "Are you sure you want to cancel this access request?"
+    );
     if (!confirmed) return;
 
     try {
-      const { error } = await supabase.from("access_control").delete().eq("id", requestId);
+      const { error } = await supabase
+        .from("access_control")
+        .delete()
+        .eq("id", requestId);
 
       if (error) {
         console.error("Error cancelling request:", error.message);
@@ -140,7 +171,9 @@ export function AccessRequestsTable() {
   };
 
   const handleResendRequest = async (oldRequest: AccessRequest) => {
-    const confirmed = window.confirm("Do you want to resend this access request?");
+    const confirmed = window.confirm(
+      "Do you want to resend this access request?"
+    );
     if (!confirmed) return;
 
     try {
@@ -175,13 +208,19 @@ export function AccessRequestsTable() {
     <Card className="border-blue-100 shadow-sm">
       <CardHeader>
         <CardTitle className="text-blue-800">Requested Access</CardTitle>
-        <CardDescription>Track the status of your patient data access requests</CardDescription>
+        <CardDescription>
+          Track the status of your patient data access requests
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="text-center py-10 text-muted-foreground">Loading requests...</div>
+          <div className="text-center py-10 text-muted-foreground">
+            Loading requests...
+          </div>
         ) : accessRequests.length === 0 ? (
-          <div className="text-center py-10 text-muted-foreground">No access requests found.</div>
+          <div className="text-center py-10 text-muted-foreground">
+            No access requests found.
+          </div>
         ) : (
           <Table>
             <TableHeader className="bg-slate-50">
@@ -217,7 +256,9 @@ export function AccessRequestsTable() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="font-mono text-xs">{request.id}</TableCell>
+                  <TableCell className="font-mono text-xs">
+                    {request.id}
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1">
                       <FileText className="h-3 w-3 text-blue-600" />
@@ -230,7 +271,11 @@ export function AccessRequestsTable() {
                   <TableCell className="text-right">
                     {request.status === "approved" ? (
                       <Button
-                        onClick={() => router.push(`/provider-dashboard/view-records/${request.id}`)}
+                        onClick={() =>
+                          router.push(
+                            `/provider-dashboard/view-records/${request.id}`
+                          )
+                        }
                         className="bg-blue-600 hover:bg-blue-700"
                       >
                         View Records

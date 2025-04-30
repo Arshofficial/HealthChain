@@ -6,14 +6,23 @@ import { supabase } from "../../../../lib/supabaseClient";
 import { UploadRecordModal } from "../../../../components/modals/UploadRecordModal";
 import { Input } from "../../../../components/ui/input";
 import { Upload, Eye, Pencil, Trash2 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "../../../../components/ui/card";
 
 export default function RecordsPage() {
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [editRecordId, setEditRecordId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState({ record_name: "", record_type: "" });
+  const [editForm, setEditForm] = useState({
+    record_name: "",
+    record_type: "",
+  });
 
   const fetchRecords = async () => {
     setLoading(true);
@@ -30,8 +39,10 @@ export default function RecordsPage() {
       // Querying records from the patient_records table filtered by patient_email
       const { data, error } = await supabase
         .from("patient_records")
-        .select("id, record_name, record_type, record_date, file_url, patient_email")
-        .eq("patient_email", patientEmail)  // Filtering by patient_email
+        .select(
+          "id, record_name, record_type, record_date, file_url, patient_email"
+        )
+        .eq("patient_email", patientEmail) // Filtering by patient_email
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -82,7 +93,10 @@ export default function RecordsPage() {
 
   const startEditing = (record: any) => {
     setEditRecordId(record.id);
-    setEditForm({ record_name: record.record_name, record_type: record.record_type });
+    setEditForm({
+      record_name: record.record_name,
+      record_type: record.record_type,
+    });
   };
 
   const cancelEditing = () => {
@@ -113,12 +127,15 @@ export default function RecordsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Health Records</h2>
+        <h2 className="hidden md:block text-3xl font-bold tracking-tight">
+          Health Records
+        </h2>
+
         <Button
-          className="bg-blue-600 hover:bg-blue-700"
+          className="hidden md:block bg-blue-600 hover:bg-blue-700"
           onClick={() => setShowUploadModal(true)}
         >
-          <Upload className="mr-2 h-4 w-4" />
+          <Upload className="hidden md:inline-block mr-2 h-4 w-4" />
           Upload New Record
         </Button>
       </div>
@@ -134,7 +151,9 @@ export default function RecordsPage() {
         <Card>
           <CardHeader>
             <CardTitle>All Health Records</CardTitle>
-            <CardDescription>View and manage all your uploaded records</CardDescription>
+            <CardDescription>
+              View and manage all your uploaded records
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">No records found yet.</p>
@@ -145,10 +164,18 @@ export default function RecordsPage() {
           <table className="w-full table-auto">
             <thead className="bg-gray-100">
               <tr>
-                <th className="px-4 py-2 text-left text-sm font-semibold">Record Name</th>
-                <th className="px-4 py-2 text-left text-sm font-semibold">Record Type</th>
-                <th className="px-4 py-2 text-left text-sm font-semibold">Record Date</th>
-                <th className="px-4 py-2 text-left text-sm font-semibold">Actions</th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">
+                  Record Name
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">
+                  Record Type
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">
+                  Record Date
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -159,7 +186,10 @@ export default function RecordsPage() {
                       <Input
                         value={editForm.record_name}
                         onChange={(e) =>
-                          setEditForm({ ...editForm, record_name: e.target.value })
+                          setEditForm({
+                            ...editForm,
+                            record_name: e.target.value,
+                          })
                         }
                       />
                     ) : (
@@ -171,7 +201,10 @@ export default function RecordsPage() {
                       <Input
                         value={editForm.record_type}
                         onChange={(e) =>
-                          setEditForm({ ...editForm, record_type: e.target.value })
+                          setEditForm({
+                            ...editForm,
+                            record_type: e.target.value,
+                          })
                         }
                       />
                     ) : (
@@ -191,7 +224,11 @@ export default function RecordsPage() {
                         >
                           Save
                         </Button>
-                        <Button size="sm" variant="outline" onClick={cancelEditing}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={cancelEditing}
+                        >
                           Cancel
                         </Button>
                       </>

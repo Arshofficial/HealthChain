@@ -15,7 +15,9 @@ interface Provider {
 export function SearchProviders() {
   const [query, setQuery] = useState("");
   const [providers, setProviders] = useState<Provider[]>([]);
-  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -44,7 +46,7 @@ export function SearchProviders() {
   return (
     <div className="flex flex-col gap-4">
       <Input
-        placeholder="Search Providers by Name or Medical ID"
+        placeholder="Search Doctors by Name or Medical ID"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="w-64 bg-slate-50 focus-visible:ring-blue-500 static"
@@ -58,7 +60,8 @@ export function SearchProviders() {
               className="p-2 hover:bg-gray-100 cursor-pointer rounded"
               onClick={() => setSelectedProvider(provider)}
             >
-              {provider.name} {provider.nationalId ? `• ${provider.nationalId}` : ""}
+              {provider.name}{" "}
+              {provider.nationalId ? `• ${provider.nationalId}` : ""}
             </div>
           ))}
         </div>
