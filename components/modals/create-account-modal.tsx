@@ -21,12 +21,19 @@ export function CreateAccountModal({ onClose }: { onClose: () => void }) {
     password: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async () => {
-    if (!formData.email || !formData.password || !formData.name || !formData.role) {
+    if (
+      !formData.email ||
+      !formData.password ||
+      !formData.name ||
+      !formData.role
+    ) {
       alert("Please fill all required fields.");
       return;
     }
@@ -70,7 +77,6 @@ export function CreateAccountModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md bg-white rounded-lg p-6 sm:p-8 space-y-6 overflow-y-auto max-h-[90vh]">
-        
         {/* Heading */}
         <h2 className="text-2xl sm:text-3xl font-bold text-center text-blue-900">
           Create <span className="text-blue-600">Account</span>
@@ -122,7 +128,7 @@ export function CreateAccountModal({ onClose }: { onClose: () => void }) {
           >
             <option value="">Select Role</option>
             <option value="Patient">Patient</option>
-            <option value="Provider">Provider</option>
+            <option value="Provider">Doctor</option>
           </select>
 
           {formData.role === "Patient" && (
@@ -177,7 +183,6 @@ export function CreateAccountModal({ onClose }: { onClose: () => void }) {
         >
           Cancel
         </Button>
-
       </div>
     </div>
   );
