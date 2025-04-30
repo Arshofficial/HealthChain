@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabaseClient"; // Correct import
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState({
@@ -43,13 +44,13 @@ export default function SettingsPage() {
 
   const handleSaveChanges = async () => {
     const { name, age, sex, nationality, nationalId } = profile;
-  
+
     // Validations
     if (!name || !age || !sex || !nationality || !nationalId) {
       alert("Please fill all required fields.");
       return;
     }
-  
+
     try {
       const { data, error } = await supabase
         .from("users")
@@ -61,20 +62,19 @@ export default function SettingsPage() {
           nationalId: nationalId,
         })
         .eq("email", profile.email); // Use the user's email to match the record
-  
+
       if (error) {
         console.error("Error updating user details:", error); // Log more detailed error
         alert(`Error saving profile changes: ${error.message}`);
         return;
       }
-  
+
       alert("Changes saved successfully!");
     } catch (err) {
       console.error("Unexpected error:", err); // Catch any other errors
       alert("An unexpected error occurred. Please try again.");
     }
   };
-  
 
   useEffect(() => {
     fetchProfile();
@@ -85,7 +85,16 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="p-8 space-y-6">
+    <div className=" space-y-6">
+      <div className="">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => window.history.back()}
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+      </div>
       <h1 className="text-2xl font-bold">Account Settings</h1>
 
       <div className="space-y-4">
@@ -107,26 +116,25 @@ export default function SettingsPage() {
         />
         <Input
           value={profile.nationality}
-          onChange={(e) => setProfile({ ...profile, nationality: e.target.value })}
+          onChange={(e) =>
+            setProfile({ ...profile, nationality: e.target.value })
+          }
           placeholder="Nationality"
         />
         <Input
           value={profile.nationalId}
-          onChange={(e) => setProfile({ ...profile, nationalId: e.target.value })}
+          onChange={(e) =>
+            setProfile({ ...profile, nationalId: e.target.value })
+          }
           placeholder="National ID"
         />
-        <Input
-          value={profile.email}
-          disabled
-          placeholder="Email"
-        />
-        <Input
-          value={profile.role}
-          disabled
-          placeholder="Role"
-        />
+        <Input value={profile.email} disabled placeholder="Email" />
+        <Input value={profile.role} disabled placeholder="Role" />
 
-        <Button onClick={handleSaveChanges} className="w-[20vh] float-end bg-blue-600 hover:bg-blue-700">
+        <Button
+          onClick={handleSaveChanges}
+          className="w-full sm:w-auto float-right bg-blue-600 hover:bg-blue-700"
+        >
           Save Changes
         </Button>
       </div>

@@ -6,7 +6,11 @@ import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
 import { supabase } from "@/lib/supabaseClient";
 
-export default function LayoutClient({ children }: { children: React.ReactNode }) {
+export default function LayoutClient({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,15 +36,15 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
       <Header />
 
       <div className="flex flex-1">
-        {/* Sidebar */}
-        <aside className="w-60 border-r bg-white flex flex-col">
-          {userRole !== null && (
+        {/* Sidebar — hidden on small screens, visible from md+ */}
+        {userRole !== null && (
+          <aside className="hidden md:flex w-60 border-r bg-white flex-col">
             <Sidebar type={userRole === "Provider" ? "provider" : "patient"} />
-          )}
-        </aside>
+          </aside>
+        )}
 
         {/* Main Content */}
-        <main className="flex-1 bg-gray-50 p-6 overflow-auto">
+        <main className="flex-1 bg-gray-50 p-4 md:p-6 overflow-auto">
           {children}
         </main>
       </div>

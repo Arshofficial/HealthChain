@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "../../../../lib/supabaseClient"; // Correct import
-import { Input } from "../../../../components/ui/input";
+import { supabase } from "../../../lib/supabaseClient"; // Correct import
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState({
@@ -49,7 +51,16 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="p-8 space-y-6">
+    <div className=" space-y-6">
+      <div className="">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => window.history.back()}
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+      </div>
       <h1 className="text-2xl font-bold">My Profile</h1>
 
       <div className="space-y-4">
@@ -61,6 +72,12 @@ export default function ProfilePage() {
         <Input value={profile.email} disabled placeholder="Email" />
         <Input value={profile.role} disabled placeholder="Role" />
       </div>
+
+      {/* <div className="mt-6">
+        <Button onClick={() => window.history.back()}>
+          Go Back
+        </Button>
+      </div> */}
     </div>
   );
 }

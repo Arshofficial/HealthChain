@@ -45,7 +45,11 @@ export function Header() {
   const getInitials = (name: string) => {
     if (!name) return "U";
     const parts = name.split(" ");
-    return parts.map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+    return parts
+      .map((p) => p[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
   };
 
   const handleLogout = () => {
@@ -58,9 +62,12 @@ export function Header() {
     user?.role === "Provider" ? "/provider-dashboard" : "/patient-dashboard";
 
   return (
-    <header className="sticky top-0 z-10 flex flex-wrap items-center justify-between h-16 gap-4 border-b bg-white px-4 md:px-6">
+    <header className="mt-10 sticky top-0 z-10 flex flex-wrap items-center justify-between h-16 gap-4 border-b bg-white px-4 md:px-6">
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2 font-semibold text-lg text-blue-600">
+      <Link
+        href={`/${user?.role.toLowerCase()}-dashboard`}
+        className="flex items-center gap-2 font-semibold text-lg text-blue-600"
+      >
         <FileText className="h-6 w-6" />
         <span>HealthChain</span>
       </Link>
@@ -75,13 +82,13 @@ export function Header() {
       {/* Notifications and Profile */}
       <div className="flex items-center gap-4">
         {/* Notifications */}
-        <Button variant="outline" size="icon" className="relative">
+        {/* <Button variant="outline" size="icon" className="relative">
           <Bell className="h-5 w-5" />
           <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center bg-blue-600">
             3
           </Badge>
           <span className="sr-only">Notifications</span>
-        </Button>
+        </Button> */}
 
         {/* Profile Dropdown */}
         <DropdownMenu>
@@ -99,7 +106,7 @@ export function Header() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`${basePath}/profile`} className="flex items-center gap-2">
+              <Link href="../../profile" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
                 Profile
               </Link>
@@ -111,9 +118,7 @@ export function Header() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
-              Log out
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

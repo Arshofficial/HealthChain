@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Home, Users, Calendar, Settings, FileText, Lock, Menu, X } from "lucide-react";
+import {
+  Home,
+  Users,
+  Calendar,
+  Settings,
+  FileText,
+  Lock,
+  Menu,
+  X,
+} from "lucide-react";
 
 interface SidebarProps {
   type: "provider" | "patient";
@@ -11,20 +20,41 @@ interface SidebarProps {
 export function Sidebar({ type }: SidebarProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const links = type === "provider"
-    ? [
-        { href: "/provider-dashboard", icon: Home, label: "Dashboard" },
-        { href: "/provider-dashboard/patients", icon: Users, label: "Patients" },
-        { href: "/provider-dashboard/appointments", icon: Calendar, label: "Appointments" },
-        { href: "/settings", icon: Settings, label: "Settings" },
-      ]
-    : [
-        { href: "/patient-dashboard", icon: Home, label: "Dashboard" },
-        { href: "/patient-dashboard/records", icon: FileText, label: "Records" },
-        { href: "/patient-dashboard/appointments", icon: Calendar, label: "Appointments" },
-        { href: "/patient-dashboard/access-control", icon: Lock, label: "Access Control" },
-        { href: "/settings", icon: Settings, label: "Settings" },
-      ];
+  const links =
+    type === "provider"
+      ? [
+          { href: "/provider-dashboard", icon: Home, label: "Dashboard" },
+          {
+            href: "/provider-dashboard/patients",
+            icon: Users,
+            label: "Patients",
+          },
+          {
+            href: "/provider-dashboard/appointments",
+            icon: Calendar,
+            label: "Appointments",
+          },
+          { href: "/settings", icon: Settings, label: "Settings" },
+        ]
+      : [
+          { href: "/patient-dashboard", icon: Home, label: "Dashboard" },
+          {
+            href: "/patient-dashboard/records",
+            icon: FileText,
+            label: "Records",
+          },
+          {
+            href: "/patient-dashboard/appointments",
+            icon: Calendar,
+            label: "Appointments",
+          },
+          {
+            href: "/patient-dashboard/access-control",
+            icon: Lock,
+            label: "Access Control",
+          },
+          { href: "/settings", icon: Settings, label: "Settings" },
+        ];
 
   return (
     <>
@@ -33,7 +63,7 @@ export function Sidebar({ type }: SidebarProps) {
         <button onClick={() => setSidebarOpen(true)} className="text-blue-900">
           <Menu className="h-6 w-6" />
         </button>
-        <h1 className="text-lg font-bold text-blue-900">HealthChain</h1>
+        {/* <h1 className="text-lg font-bold text-blue-900">HealthChain</h1> */}
       </div>
 
       {/* Sidebar */}
@@ -44,7 +74,10 @@ export function Sidebar({ type }: SidebarProps) {
       >
         {/* Mobile Close Button */}
         <div className="flex md:hidden justify-end p-4">
-          <button onClick={() => setSidebarOpen(false)} className="text-blue-900">
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="text-blue-900"
+          >
             <X className="h-6 w-6" />
           </button>
         </div>
